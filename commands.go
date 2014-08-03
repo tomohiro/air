@@ -18,7 +18,7 @@ var commandDevices = cli.Command{
 
 var commandPlay = cli.Command{
 	Name:  "play",
-	Usage: "",
+	Usage: "Play media file",
 	Description: `
 `,
 	Action: Play,
