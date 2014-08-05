@@ -7,17 +7,7 @@ import (
 	"net"
 	"net/http"
 	"strings"
-
-	"github.com/codegangsta/cli"
-	"github.com/gongo/go-airplay"
 )
-
-// Play media
-func Play(c *cli.Context) {
-	client := airplay.NewClient()
-	ch := client.Play(source(c.Args().First()))
-	<-ch
-}
 
 func source(path string) string {
 	url := serve(path)
