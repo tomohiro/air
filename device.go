@@ -1,15 +1,17 @@
 package main
 
 import (
-  "fmt"
+	"fmt"
 
-  "github.com/codegangsta/cli"
-  "github.com/gongo/go-airplay"
+	"github.com/Tomohiro/go-airplay"
 )
 
-// Show devices
-func Devices(c *cli.Context) {
-  for _, d := range airplay.Devices() {
-    fmt.Println(d.Name)
-  }
+// Devices Returns AirPlay devices
+func Devices() []airplay.Device {
+	devices := airplay.Devices()
+	if len(devices) == 0 {
+		fmt.Println("air: AirPlay Devices not found")
+	}
+
+	return devices
 }
