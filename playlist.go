@@ -13,7 +13,7 @@ type Playlist struct {
 	Entries []Media
 }
 
-// NewPlaylist Creates a new playlist
+// NewPlaylist creates a new playlist
 func NewPlaylist() *Playlist {
 	return new(Playlist)
 }
