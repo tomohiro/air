@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/gongo/go-airplay"
@@ -20,13 +19,11 @@ var Commands = []cli.Command{
 			err := playlist.Add(target)
 			if err != nil {
 				log.Fatal(err)
-				os.Exit(1)
 			}
 
 			client, err := airplay.NewClient()
 			if err != nil {
 				log.Fatal(err)
-				os.Exit(1)
 			}
 			for _, media := range playlist.Entries {
 				fmt.Println(media.Path)
@@ -42,7 +39,6 @@ var Commands = []cli.Command{
 			devices, err := Devices()
 			if err != nil {
 				log.Fatal(err)
-				os.Exit(1)
 			}
 			for _, d := range devices {
 				fmt.Println(d.Name)
