@@ -1,17 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/Tomohiro/go-airplay"
 )
 
 // Devices Returns AirPlay devices
-func Devices() []airplay.Device {
+func Devices() ([]airplay.Device, error) {
 	devices := airplay.Devices()
 	if len(devices) == 0 {
-		fmt.Println("air: AirPlay Devices not found")
+		return devices, errors.New("air: AirPlay Devices not found")
 	}
 
-	return devices
+	return devices, nil
 }
