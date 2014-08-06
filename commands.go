@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/codegangsta/cli"
@@ -14,20 +15,36 @@ var Commands = []cli.Command{
 		Name:  "play",
 		Usage: "Play media file(Movie, Music)",
 		Action: func(c *cli.Context) {
-			client, err := airplay.NewClient()
+			target := c.Args().First()
+			playlist := NewPlaylist()
+			err := playlist.Add(target)
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
-			ch := client.Play(source(c.Args().First()))
-			<-ch
+
+			client, err := airplay.NewClient()
+			if err != nil {
+				log.Fatal(err)
+				os.Exit(1)
+			}
+			for _, media := range playlist.Entries {
+				fmt.Println(media.Path)
+				ch := client.Play(source(media.Path))
+				<-ch
+			}
 		},
 	},
 	{
 		Name:  "devices",
 		Usage: "Show AirPlay devices",
 		Action: func(c *cli.Context) {
-			for _, d := range Devices() {
+			devices, err := Devices()
+			if err != nil {
+				log.Fatal(err)
+				os.Exit(1)
+			}
+			for _, d := range devices {
 				fmt.Println(d.Name)
 			}
 		},
