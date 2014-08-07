@@ -17,8 +17,20 @@ func newApp() *cli.App {
 	app.Email = "tomohiro.t@gmail.com"
 	app.Commands = []cli.Command{
 		{
-			Name:   "play",
-			Usage:  "Play media file(Movie, Music)",
+			Name:  "play",
+			Usage: "Play media file(Movie, Music)",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "dir, d",
+					Value: "",
+					Usage: "directory",
+				},
+				cli.StringFlag{
+					Name:  "file, f",
+					Value: "",
+					Usage: "file",
+				},
+			},
 			Action: play,
 		},
 		{
@@ -31,9 +43,8 @@ func newApp() *cli.App {
 }
 
 func play(c *cli.Context) {
-	target := c.Args().First()
 	playlist := player.NewPlaylist()
-	if err := playlist.Add(target); err != nil {
+	if err := playlist.Add(c); err != nil {
 		log.Fatal(err)
 	}
 

@@ -14,8 +14,14 @@ type Media struct {
 	Path string
 }
 
-func source(path string) string {
-	url := serve(path)
+// NewMedia creates a new media
+func NewMedia(path string) *Media {
+	return &Media{Path: path}
+}
+
+// URL returns serve media url
+func (m *Media) URL() string {
+	url := serve(m.Path)
 	return url
 }
 
@@ -28,9 +34,11 @@ func serve(file string) string {
 	ip, err := externalIP()
 	if err != nil {
 		log.Fatal(err)
+	}
+	port, err := findFreePort()
+	if err != nil {
 		return ""
 	}
-	port := findFreePort()
 	go http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 	return fmt.Sprintf("http://%s:%s", ip, port)
 }
@@ -73,11 +81,11 @@ func externalIP() (string, error) {
 	return "", errors.New("are you connected to the network?")
 }
 
-func findFreePort() string {
+func findFreePort() (string, error) {
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	port := strings.Split(l.Addr().String(), ":")[1]
-	return port
+	return port, nil
 }

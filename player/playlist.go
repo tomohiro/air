@@ -4,13 +4,15 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/codegangsta/cli"
+
 	"os"
 	"path/filepath"
 )
 
 // Playlist have multiple media file
 type Playlist struct {
-	Entries []Media
+	Entries []*Media
 }
 
 // NewPlaylist creates a new playlist
@@ -19,7 +21,12 @@ func NewPlaylist() *Playlist {
 }
 
 // Add media file to playlist
-func (p *Playlist) Add(path string) error {
+func (p *Playlist) Add(c *cli.Context) error {
+	path := c.Args().First()
+	if path == "" {
+		return fmt.Errorf("%s is not found", path)
+	}
+
 	path, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -41,7 +48,7 @@ func (p *Playlist) Add(path string) error {
 		fmt.Println(f.Name() + " is directory")
 		return errors.New("directory is not supported")
 	case mode.IsRegular():
-		p.Entries = append(p.Entries, Media{Path: path})
+		p.Entries = append(p.Entries, NewMedia(path))
 	}
 	return nil
 }

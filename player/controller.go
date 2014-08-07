@@ -2,7 +2,6 @@ package player
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gongo/go-airplay"
 )
@@ -34,8 +33,7 @@ func (c *Controller) Play() error {
 	}
 
 	for _, media := range c.Playlist.Entries {
-		fmt.Println(media.Path)
-		ch := client.Play(source(media.Path))
+		ch := client.Play(media.URL())
 		<-ch
 	}
 	return nil
