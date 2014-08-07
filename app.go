@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/Tomohiro/air/player"
 	"github.com/codegangsta/cli"
-	"github.com/gongo/go-airplay"
 )
 
 func newApp() *cli.App {
@@ -32,25 +32,23 @@ func newApp() *cli.App {
 
 func play(c *cli.Context) {
 	target := c.Args().First()
-	playlist := NewPlaylist()
-	err := playlist.Add(target)
-	if err != nil {
+	playlist := player.NewPlaylist()
+	if err := playlist.Add(target); err != nil {
 		log.Fatal(err)
 	}
 
-	client, err := airplay.NewClient()
-	if err != nil {
+	controller := player.NewController()
+	if err := controller.SetPlaylist(playlist); err != nil {
 		log.Fatal(err)
 	}
-	for _, media := range playlist.Entries {
-		fmt.Println(media.Path)
-		ch := client.Play(source(media.Path))
-		<-ch
+
+	if err := controller.Play(); err != nil {
+		log.Fatal(err)
 	}
 }
 
 func devices(c *cli.Context) {
-	devices, err := Devices()
+	devices, err := player.Devices()
 	if err != nil {
 		log.Fatal(err)
 	}
