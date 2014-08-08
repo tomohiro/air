@@ -1,4 +1,4 @@
-package player
+package media
 
 import (
 	"errors"
@@ -9,20 +9,19 @@ import (
 	"strings"
 )
 
-// Media file
-type Media struct {
+// File is local file
+type File struct {
 	Path string
 }
 
-// NewMedia creates a new media
-func NewMedia(path string) *Media {
-	return &Media{Path: path}
+// NewFile creates a new file
+func NewFile(path string) *File {
+	return &File{Path: path}
 }
 
 // URL returns serve media url
-func (m *Media) URL() string {
-	url := serve(m.Path)
-	return url
+func (m *File) URL() string {
+	return serve(m.Path)
 }
 
 func serve(file string) string {

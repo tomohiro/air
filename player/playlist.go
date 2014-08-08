@@ -4,15 +4,13 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Tomohiro/air/media"
 	"github.com/codegangsta/cli"
-
-	"os"
-	"path/filepath"
 )
 
 // Playlist have multiple media file
 type Playlist struct {
-	Entries []*Media
+	Entries []media.Media
 }
 
 // NewPlaylist creates a new playlist
@@ -27,28 +25,17 @@ func (p *Playlist) Add(c *cli.Context) error {
 		return fmt.Errorf("%s is not found", path)
 	}
 
-	path, err := filepath.Abs(path)
+	mediaType, err := media.ClassifyType(path)
 	if err != nil {
 		return err
 	}
 
-	f, err := os.Open(path)
-	defer f.Close()
-	if err != nil {
-		return err
-	}
-
-	stat, err := f.Stat()
-	if err != nil {
-		return err
-	}
-
-	switch mode := stat.Mode(); {
-	case mode.IsDir():
-		fmt.Println(f.Name() + " is directory")
+	switch mediaType {
+	case media.IsDirectory:
+		fmt.Println(path + " is directory")
 		return errors.New("directory is not supported")
-	case mode.IsRegular():
-		p.Entries = append(p.Entries, NewMedia(path))
+	case media.IsFile:
+		p.Entries = append(p.Entries, media.NewFile(path))
 	}
 	return nil
 }
