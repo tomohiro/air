@@ -14,32 +14,44 @@ type File struct {
 	Path string
 }
 
-// NewFile creates a new file
-func NewFile(path string) *File {
-	return &File{Path: path}
-}
+// FileServerAddr is ip and port of serving files
+var FileServerAddr string
 
-// URL returns serve media url
-func (m *File) URL() string {
-	return serve(m.Path)
-}
-
-func serve(file string) string {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "no-cache")
-		http.ServeFile(w, r, file)
-	})
-
+func init() {
 	ip, err := externalIP()
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	port, err := findFreePort()
 	if err != nil {
-		return ""
+		log.Fatal(err)
 	}
-	go http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
-	return fmt.Sprintf("http://%s:%s", ip, port)
+
+	FileServerAddr = fmt.Sprintf("%s:%s", ip, port)
+}
+
+// NewFile creates a new file
+func NewFile(path string) *File {
+	file := new(File)
+
+	http.HandleFunc(fmt.Sprintf("/%s", path), func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-cache")
+		http.ServeFile(w, r, path)
+	})
+
+	file.Path = fmt.Sprintf("http://%s/%s", FileServerAddr, path)
+	return file
+}
+
+// URL returns serve media url
+func (m *File) URL() string {
+	serve()
+	return m.Path
+}
+
+func serve() {
+	go http.ListenAndServe(FileServerAddr, nil)
 }
 
 // https://code.google.com/p/whispering-gophers/source/browse/util/helper.go
