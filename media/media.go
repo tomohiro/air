@@ -1,6 +1,7 @@
 package media
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -20,6 +21,11 @@ var (
 	// IsResource is media type is resource
 	IsResource = "resource"
 )
+
+// IsSupported runs validation filetype
+func IsSupported(path string) error {
+	return fmt.Errorf("%s is unsupported mime type", path)
+}
 
 // ClassifyType classify type from path
 func ClassifyType(path string) (string, error) {
