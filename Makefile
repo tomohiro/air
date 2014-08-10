@@ -1,13 +1,18 @@
 .PHONY: clean
 
-default: build
+install: deps
+	@go install
 
-clean:
-	@go clean
-	@rm -rf pkg
+deps:
+	@go get -d -v ./...
+	@go build -v ./...
+
+test: deps
+	@go test -v ./...
 
 build:
 	@gox -os "darwin linux windows" -output "pkg/{{.OS}}_{{.Arch}}/{{.Dir}}"
 
-install:
-	@go install
+clean:
+	@go clean
+	@rm -rf pkg
