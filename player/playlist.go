@@ -27,7 +27,7 @@ func (p *Playlist) Add(c *cli.Context) error {
 		return fmt.Errorf("%s is not found", path)
 	}
 
-	mediaType, err := media.ClassifyType(path)
+	mediaType, err := media.Classify(path)
 	if err != nil {
 		return err
 	}
