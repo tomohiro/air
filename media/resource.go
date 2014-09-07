@@ -10,7 +10,7 @@ func NewResource(path string) *Resource {
 	return &Resource{Path: path}
 }
 
-// URL returns resource's url
+// URL returns a resource's url
 func (r *Resource) URL() string {
 	return r.Path
 }

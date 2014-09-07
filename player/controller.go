@@ -11,12 +11,12 @@ type Controller struct {
 	Playlist *Playlist
 }
 
-// NewController returns new controller
+// NewController returns a new controller
 func NewController() *Controller {
 	return new(Controller)
 }
 
-// SetPlaylist Set Playlist
+// SetPlaylist sets playlist
 func (c *Controller) SetPlaylist(p *Playlist) error {
 	if len(p.Entries) == 0 {
 		return errors.New("media files not found")
@@ -25,7 +25,7 @@ func (c *Controller) SetPlaylist(p *Playlist) error {
 	return nil
 }
 
-// Play all entries
+// Play plays all entries in the playlist
 func (c *Controller) Play() error {
 	client, err := airplay.NewClient()
 	if err != nil {

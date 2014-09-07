@@ -3,6 +3,8 @@ package player
 import (
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/Tomohiro/air/media"
 	"github.com/codegangsta/cli"
@@ -25,7 +27,7 @@ func (p *Playlist) Add(c *cli.Context) error {
 		return fmt.Errorf("%s is not found", path)
 	}
 
-	mediaType, err := media.ClassifyType(path)
+	mediaType, err := media.Classify(path)
 	if err != nil {
 		return err
 	}
@@ -33,6 +35,12 @@ func (p *Playlist) Add(c *cli.Context) error {
 	switch mediaType {
 	case media.IsDirectory:
 		fmt.Println(path + " is directory")
+		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+			if err := media.IsSupported(path); err != nil {
+				return err
+			}
+			return nil
+		})
 		return errors.New("directory is not supported")
 	case media.IsFile:
 		p.Entries = append(p.Entries, media.NewFile(path))

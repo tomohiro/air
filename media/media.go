@@ -1,6 +1,7 @@
 package media
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -21,8 +22,15 @@ var (
 	IsResource = "resource"
 )
 
-// ClassifyType classify type from path
-func ClassifyType(path string) (string, error) {
+// IsSupported check if the given path is supported file type.
+// If the given path unsupported file type, it's returns error.
+func IsSupported(path string) error {
+	return fmt.Errorf("%s is unsupported mime type", path)
+}
+
+// Classify classify the given path to media type.
+// Types are file, directory, resource.
+func Classify(path string) (string, error) {
 	path, err := filepath.Abs(path)
 	if err != nil {
 		return "", err
