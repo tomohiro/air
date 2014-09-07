@@ -41,6 +41,7 @@ func NewFile(path string) *File {
 	})
 
 	file.Path = fmt.Sprintf("http://%s/%s", FileServerAddr, path)
+	fmt.Println(file.Path)
 	return file
 }
 
