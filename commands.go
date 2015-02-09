@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/Tomohiro/air/player"
@@ -15,30 +14,7 @@ func newApp() *cli.App {
 	app.Usage = "Command-line AirPlay client for Apple TV"
 	app.Author = "Tomohiro TAIRA"
 	app.Email = "tomohiro.t@gmail.com"
-	app.Commands = []cli.Command{
-		{
-			Name:  "play",
-			Usage: "Play media file(Movie, Music)",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "dir, d",
-					Value: "",
-					Usage: "directory",
-				},
-				cli.StringFlag{
-					Name:  "file, f",
-					Value: "",
-					Usage: "file",
-				},
-			},
-			Action: play,
-		},
-		{
-			Name:   "devices",
-			Usage:  "Show AirPlay devices",
-			Action: devices,
-		},
-	}
+	app.Action = play
 	return app
 }
 
@@ -55,15 +31,5 @@ func play(c *cli.Context) {
 
 	if err := controller.Play(); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func devices(c *cli.Context) {
-	devices, err := player.Devices()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, d := range devices {
-		fmt.Println(d.Name)
 	}
 }
