@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"log"
 
-	"github.com/Tomohiro/air/player"
+	"github.com/Tomohiro/air/media"
 	"github.com/codegangsta/cli"
+	"github.com/gongo/go-airplay"
 )
 
 func newApp() *cli.App {
@@ -19,17 +22,30 @@ func newApp() *cli.App {
 }
 
 func play(c *cli.Context) {
-	playlist := player.NewPlaylist()
-	if err := playlist.Add(c); err != nil {
+	path := c.Args().First()
+	if path == "" {
+		log.Fatal(fmt.Errorf("%s is not found", path))
+	}
+
+	mediaType, err := media.ClassifyType(path)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	controller := player.NewController()
-	if err := controller.SetPlaylist(playlist); err != nil {
+	var m media.Media
+
+	switch mediaType {
+	case media.IsDirectory:
+		log.Fatal(errors.New("directory is not supported"))
+	case media.IsFile:
+		m = media.NewFile(path)
+	}
+
+	client, err := airplay.NewClient()
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := controller.Play(); err != nil {
-		log.Fatal(err)
-	}
+	ch := client.Play(m.URL())
+	<-ch
 }
