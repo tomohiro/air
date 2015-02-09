@@ -3,7 +3,8 @@ Air
 
 Command-line AirPlay video client for Apple TV
 
-[![Build Status](https://travis-ci.org/Tomohiro/air.svg?branch=master)](https://travis-ci.org/Tomohiro/air)
+[![Stillmaintained](http://stillmaintained.com/Tomohiro/air.png)](http://stillmaintained.com/Tomohiro/air)
+[![Build Status](https://img.shields.io/travis/Tomohiro/air.svg?style=flat-square)](https://travis-ci.org/Tomohiro/air)
 
 
 Usage
