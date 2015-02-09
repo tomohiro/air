@@ -9,10 +9,8 @@ Command-line AirPlay video client for Apple TV
 Usage
 --------------------------------------------------------------------------------
 
-### Play video
-
 ```sh
-$ air play '~/Movies/Trailers/007 SKYFALL.mp4'
+$ air '~/Movies/Trailers/007 SKYFALL.mp4'
 ```
 
 
@@ -42,6 +40,6 @@ File extension | MIME type
 LICENSE
 --------------------------------------------------------------------------------
 
-&copy; 2014 Tomohiro TAIRA.
+&copy; 2014 - 2015 Tomohiro TAIRA.
 This project is licensed under the MIT license.
 See LICENSE for details.
