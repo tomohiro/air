@@ -33,7 +33,7 @@ func play(c *cli.Context) {
 		m = media.NewFile(path)
 	}
 
-	client, err := airplay.DefaultClient()
+	client, err := airplay.FirstClient()
 	if err != nil {
 		log.Fatal(err)
 	}
