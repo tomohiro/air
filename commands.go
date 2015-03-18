@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"log"
 
 	"github.com/Tomohiro/air/media"
@@ -23,10 +21,6 @@ func newApp() *cli.App {
 
 func play(c *cli.Context) {
 	path := c.Args().First()
-	if path == "" {
-		log.Fatal(fmt.Errorf("%s is not found", path))
-	}
-
 	mediaType, err := media.ClassifyType(path)
 	if err != nil {
 		log.Fatal(err)
@@ -35,13 +29,11 @@ func play(c *cli.Context) {
 	var m media.Media
 
 	switch mediaType {
-	case media.IsDirectory:
-		log.Fatal(errors.New("directory is not supported"))
 	case media.IsFile:
 		m = media.NewFile(path)
 	}
 
-	client, err := airplay.NewClient()
+	client, err := airplay.DefaultClient()
 	if err != nil {
 		log.Fatal(err)
 	}

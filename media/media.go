@@ -1,6 +1,7 @@
 package media
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 )
@@ -11,9 +12,6 @@ type Media interface {
 }
 
 var (
-	// IsDirectory is media type is directory
-	IsDirectory = "directory"
-
 	// IsFile is media type is file
 	IsFile = "file"
 
@@ -41,7 +39,7 @@ func ClassifyType(path string) (string, error) {
 
 	switch mode := stat.Mode(); {
 	case mode.IsDir():
-		return IsDirectory, nil
+		return "", errors.New("directory is unsupported")
 	case mode.IsRegular():
 		return IsFile, nil
 	}
