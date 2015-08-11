@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"github.com/Tomohiro/air/media"
 	"github.com/codegangsta/cli"
 	"github.com/gongo/go-airplay"
 )
@@ -21,16 +20,16 @@ func newApp() *cli.App {
 
 func play(c *cli.Context) {
 	path := c.Args().First()
-	mediaType, err := media.ClassifyType(path)
+	mediaType, err := classifyType(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var m media.Media
+	var m media
 
 	switch mediaType {
-	case media.IsFile:
-		m = media.NewFile(path)
+	case isFile:
+		m = newFile(path)
 	}
 
 	client, err := airplay.FirstClient()

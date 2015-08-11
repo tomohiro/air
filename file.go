@@ -1,4 +1,4 @@
-package media
+package main
 
 import (
 	"errors"
@@ -9,18 +9,16 @@ import (
 	"strings"
 )
 
-// File is local file
-type File struct {
+type file struct {
 	Path string
 }
 
-// NewFile creates a new file
-func NewFile(path string) *File {
-	return &File{Path: path}
+func newFile(path string) *file {
+	return &file{Path: path}
 }
 
 // URL returns serve media url
-func (m *File) URL() string {
+func (m *file) URL() string {
 	return serve(m.Path)
 }
 
