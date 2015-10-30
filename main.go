@@ -2,10 +2,15 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/gongo/go-airplay"
 )
+
+func main() {
+	newApp().Run(os.Args)
+}
 
 func newApp() *cli.App {
 	app := cli.NewApp()
