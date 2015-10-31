@@ -1,18 +1,23 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/gongo/go-airplay"
 )
 
+var (
+	// exitCode to terminate.
+	exitCode = 0
+)
+
 func main() {
-	newApp().Run(os.Args)
+	os.Exit(realMain())
 }
 
-func newApp() *cli.App {
+func realMain() int {
 	app := cli.NewApp()
 	app.Name = "air"
 	app.Version = Version
@@ -20,14 +25,17 @@ func newApp() *cli.App {
 	app.Author = "Tomohiro TAIRA"
 	app.Email = "tomohiro.t@gmail.com"
 	app.Action = play
-	return app
+	app.Run(os.Args)
+	return exitCode
 }
 
 func play(c *cli.Context) {
 	path := c.Args().First()
 	mediaType, err := classifyType(path)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		exitCode = 1
+		return
 	}
 
 	var m media
@@ -39,7 +47,9 @@ func play(c *cli.Context) {
 
 	client, err := airplay.FirstClient()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		exitCode = 1
+		return
 	}
 
 	ch := client.Play(m.URL())
