@@ -1,9 +1,14 @@
 package main
 
-import "github.com/gongo/go-airplay"
+import (
+	"fmt"
+	"os"
 
-// Play plays the recieved paths of movie files to the Apple TV.
-func Play(list []string) error {
+	"github.com/gongo/go-airplay"
+)
+
+// Play plays the recieved paths of media files to the Apple TV.
+func Play(paths []string) error {
 	var err error
 
 	// Initialize an AirPlay client device.
@@ -12,20 +17,14 @@ func Play(list []string) error {
 		return err
 	}
 
-	for _, path := range list {
-		mediaType, err := classifyType(path)
+	for _, path := range paths {
+		url, err := Open(path)
 		if err != nil {
-			return err
+			fmt.Fprintf(os.Stderr, "Skipped %s. because %s.\n", path, err)
+			continue
 		}
 
-		var m media
-
-		switch mediaType {
-		case isFile:
-			m = newFile(path)
-		}
-
-		ch := client.Play(m.URL())
+		ch := client.Play(url)
 		<-ch
 	}
 
