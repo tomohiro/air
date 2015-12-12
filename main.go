@@ -29,14 +29,14 @@ func realMain() int {
 }
 
 func play(c *cli.Context) {
-	path := c.Args()
-	if len(path) == 0 {
+	paths := c.Args()
+	if len(paths) == 0 {
 		fmt.Fprintf(os.Stderr, "Incorrect usage.\nRun `air <path>`\n")
 		exitCode = 1
 		return
 	}
 
-	if err := Play(path); err != nil {
+	if err := Play(paths); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		exitCode = 1
 		return
