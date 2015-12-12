@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/gongo/go-airplay"
 )
 
 var (
@@ -30,28 +29,16 @@ func realMain() int {
 }
 
 func play(c *cli.Context) {
-	path := c.Args().First()
-	mediaType, err := classifyType(path)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
+	path := c.Args()
+	if len(path) == 0 {
+		fmt.Fprintf(os.Stderr, "Incorrect usage.\nRun `air <path>`\n")
 		exitCode = 1
 		return
 	}
 
-	var m media
-
-	switch mediaType {
-	case isFile:
-		m = newFile(path)
-	}
-
-	client, err := airplay.FirstClient()
-	if err != nil {
+	if err := Play(path); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		exitCode = 1
 		return
 	}
-
-	ch := client.Play(m.URL())
-	<-ch
 }

@@ -11,8 +11,7 @@ type media interface {
 }
 
 var (
-	isFile     = "file"
-	isResource = "resource"
+	isFile = "file"
 )
 
 func classifyType(path string) (string, error) {
