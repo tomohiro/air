@@ -11,9 +11,9 @@ import (
 	"github.com/pdxgo/whispering-gophers/util"
 )
 
-// Open launches server from the media file path.
-func Open(path string) (string, error) {
-	path, err := filepath.Abs(path)
+// Open launches server from the media file.
+func Open(name string) (string, error) {
+	path, err := filepath.Abs(name)
 	if err != nil {
 		return "", err
 	}
@@ -39,25 +39,17 @@ func Open(path string) (string, error) {
 	return "", nil
 }
 
-// serve listens the file f from the local file system as local network address
-func serve(f string) string {
+func serve(name string) string {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// Set `no-cache` to flush the cache on Apple TV.
 		w.Header().Set("Cache-Control", "no-cache")
-		http.ServeFile(w, r, f)
+		http.ServeFile(w, r, name)
 	})
 
-	laddr := availableAddr()
-	go http.ListenAndServe(laddr, nil)
-	return fmt.Sprintf("http://%s", laddr)
-}
-
-// availableAddr returns an address that available non-lookback IPv4 network
-// interface and port.
-func availableAddr() string {
-	ln, err := util.Listen()
-	defer ln.Close()
+	l, err := util.Listen()
 	if err != nil {
 		log.Fatal(err)
 	}
-	return ln.Addr().String()
+	go http.Serve(l, http.DefaultServeMux)
+	return fmt.Sprintf("http://%s", l.Addr().String())
 }
