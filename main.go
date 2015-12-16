@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/gongo/go-airplay"
 )
 
 var (
@@ -13,32 +14,51 @@ var (
 )
 
 func main() {
-	os.Exit(realMain())
-}
-
-func realMain() int {
 	app := cli.NewApp()
 	app.Name = "air"
 	app.Version = Version
 	app.Usage = "Command-line AirPlay client for Apple TV"
 	app.Author = "Tomohiro TAIRA"
 	app.Email = "tomohiro.t@gmail.com"
-	app.Action = play
+	app.Action = func(c *cli.Context) {
+		paths := c.Args()
+		if len(paths) == 0 {
+			fmt.Fprintf(os.Stderr, "Incorrect usage.\nRun `air <path>`\n")
+			exitCode = 1
+			return
+		}
+
+		if err := Play(paths); err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			exitCode = 1
+			return
+		}
+	}
 	app.Run(os.Args)
-	return exitCode
+
+	os.Exit(exitCode)
 }
 
-func play(c *cli.Context) {
-	paths := c.Args()
-	if len(paths) == 0 {
-		fmt.Fprintf(os.Stderr, "Incorrect usage.\nRun `air <path>`\n")
-		exitCode = 1
-		return
+// Play plays the recieved paths of media files to the Apple TV.
+func Play(paths []string) error {
+	var err error
+
+	// Initialize an AirPlay client device.
+	client, err := airplay.FirstClient()
+	if err != nil {
+		return err
 	}
 
-	if err := Play(paths); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		exitCode = 1
-		return
+	for _, path := range paths {
+		url, err := Open(path)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Skipped %s. because %s.\n", path, err)
+			continue
+		}
+
+		ch := client.Play(url)
+		<-ch
 	}
+
+	return err
 }
