@@ -22,7 +22,7 @@ func main() {
 	app.Email = "tomohiro.t@gmail.com"
 	app.Action = func(c *cli.Context) {
 		paths := c.Args()
-		if len(paths) == 0 {
+		if !paths.Present() {
 			fmt.Fprintf(os.Stderr, "Incorrect usage.\nRun `air <path>`\n")
 			exitCode = 1
 			return
