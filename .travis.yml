@@ -1,8 +1,14 @@
-sudo: false
 language: go
 
 go:
   - 1.6
+
+before_install:
+  - sudo add-apt-repository ppa:masterminds/glide -y
+  - sudo apt-get update -q
+  - sudo apt-get install glide -y
+  - go get github.com/mattn/goveralls
+  - go get golang.org/x/tools/cmd/cover
 
 before_script:
   - make setup
@@ -10,3 +16,6 @@ before_script:
 
 script:
   - make build
+
+notifications:
+  email: false
