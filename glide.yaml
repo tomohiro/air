@@ -1,0 +1,8 @@
+package: github.com/Tomohiro/air
+import:
+- package: github.com/codegangsta/cli
+  version: ^1.18.1
+- package: github.com/gongo/go-airplay
+- package: github.com/pdxgo/whispering-gophers
+  subpackages:
+  - util

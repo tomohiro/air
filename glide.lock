@@ -1,0 +1,16 @@
+hash: ff4c60b519f248f27ceb54fa78efa5b3d7e03ba8d5f0b30cc69162568efea53d
+updated: 2016-09-04T22:50:59.979661264+09:00
+imports:
+- name: github.com/codegangsta/cli
+  version: a14d7d367bc02b1f57d88de97926727f2d936387
+- name: github.com/DHowett/go-plist
+  version: fec78c8d6756fa37981f204f6bf21d909e24fde9
+- name: github.com/gongo/go-airplay
+  version: 54c73fa6e23e64caac1154de1f51178b2b0b2223
+- name: github.com/miekg/dns
+  version: db96a2b759cdef4f11a34506a42eb8d1290c598e
+- name: github.com/pdxgo/whispering-gophers
+  version: b14567825742d2c8a0a7e5a77d1afe4430849e9c
+  subpackages:
+  - util
+testImports: []
