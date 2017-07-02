@@ -1,0 +1,7 @@
+[[constraint]]
+  name = "github.com/codegangsta/cli"
+  version = "1.18.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gongo/go-airplay"
