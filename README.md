@@ -40,6 +40,6 @@ File extension | MIME type
 LICENSE
 --------------------------------------------------------------------------------
 
-&copy; 2014 - 2015 Tomohiro TAIRA.
+&copy; 2014 - 2017 Tomohiro TAIRA.
 
 This project licensed under the MIT license. See [LICENSE](LICENSE) for details.
